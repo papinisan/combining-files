@@ -1,0 +1,75 @@
+---
+title: "combining-files"
+author: "Santiago Papini"
+date: "3/30/2019"
+output: html_document
+---
+####PROBLEM
+1. You have separate files of the same data for participants, and you want to combine them to a single dataset.
+
+####ASSUMPTIONS
+1. Simple scenario: all of the datasets have the exact same number of variables (columns) with the exact same variable names.
+2. You have all the files in the same directory (i.e., folder on your computer).
+
+####MODIFICATIONS
+1. As always, you have to replace the directory below with the directory where your files are stored.
+2. In this example, the files are in .csv format. If your files are in another format you will have to replace every instance of ".csv" in the code below to reflect your file format. You will also have to replace "read.csv". See this link to choose the right function: 
+https://www.datacamp.com/community/tutorials/r-data-import-tutorial
+
+```{r}
+#Set the directory where your data files are. 
+setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
+#Generate a list of file names with the ending ".csv" in the directory. If your files have a different ending, replace ".csv".
+list.names <- list.files(pattern = ".csv")
+#Initialize an empty list where your individual data files will get stored. I use "df" which stands for dataframe.
+list.df <- list()
+#This loop will load each individual data file and store it in list.df
+for(i in 1:length(list.names)){
+  list.df[[i]] = read.csv(list.names[[i]])
+}
+#This takes all the dataframes and combines them.
+df.combined <- do.call(rbind, list.df)
+#If you're going to analyze your data in a different program, this will save the combined data file in the directory:
+write.csv(df.combined, "df.combined.csv", row.names = FALSE)
+```
+####ISSUE 1: ADD SUBJECT ID COLUMN BASED ON FILE NAME
+If your individual data files do not have a file name you will need to add a few extra lines of code.
+
+```{r}
+#Set the directory where your data files are. 
+setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
+#Generate a list of file names with the ending ".csv" in the directory. If your files have a different ending, replace ".csv".
+list.names <- list.files(pattern = ".csv")
+#Initialize an empty list where your individual data files will get stored. I use "df" which stands for dataframe.
+list.df <- list()
+#create a list to store the subject IDs
+list.subid <- list()
+#This loop will load each individual data file and store it in list.df
+for(i in 1:length(list.names)){
+  list.df[[i]] = read.csv(list.names[[i]])
+  #This line will create a subid list. It will also get rid of the ".csv" from the file name.
+  list.subid[[i]] = rep(gsub(".csv", "", list.names[[i]]), nrow(list.df[[i]]))
+}
+#This takes all the dataframes and combines them.
+df.combined <- do.call(rbind, list.df)
+#Add a column for subid.
+df.combined$subid <- unlist(list.subid)
+#If you're going to analyze your data in a different program, this will save the combined data file in the directory:
+write.csv(df.combined, "df.combined.csv", row.names = FALSE)
+```
+
+####Here is the clean code without comments. Please post any comments below if you are getting an error, or if there is something additional that you would like to do within this loop.
+```{r}
+
+setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
+list.names <- list.files(pattern = ".csv")
+list.df <- list()
+list.subid <- list()
+for(i in 1:length(list.names)){
+  list.df[[i]] = read.csv(list.names[[i]])
+  list.subid[[i]] = rep(gsub(".csv", "", list.names[[i]]), nrow(list.df[[i]]))
+}
+df.combined <- do.call(rbind, list.df)
+df.combined$subid <- unlist(list.subid)
+write.csv(df.combined, "df.combined.csv", row.names = FALSE)
+```
