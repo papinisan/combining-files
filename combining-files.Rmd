@@ -1,5 +1,5 @@
 ---
-title: "combining-files"
+title: "Combining individual participant data files to form a single data file."
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
