@@ -1,5 +1,10 @@
 ---
 title: "combining-files"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Santiago Papini"
 date: "3/30/2019"
 output: html_document
@@ -16,7 +21,7 @@ output: html_document
 2. In this example, the files are in .csv format. If your files are in another format you will have to replace every instance of ".csv" in the code below to reflect your file format. You will also have to replace "read.csv". See this link to choose the right function: 
 https://www.datacamp.com/community/tutorials/r-data-import-tutorial
 
-```{r}
+```{r chunk1, eval = FALSE}
 #Set the directory where your data files are. 
 setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
 #Generate a list of file names with the ending ".csv" in the directory. If your files have a different ending, replace ".csv".
@@ -35,7 +40,7 @@ write.csv(df.combined, "df.combined.csv", row.names = FALSE)
 ####ISSUE 1: ADD SUBJECT ID COLUMN BASED ON FILE NAME
 If your individual data files do not have a file name you will need to add a few extra lines of code.
 
-```{r}
+```{r chunk2, eval = FALSE}
 #Set the directory where your data files are. 
 setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
 #Generate a list of file names with the ending ".csv" in the directory. If your files have a different ending, replace ".csv".
@@ -59,7 +64,7 @@ write.csv(df.combined, "df.combined.csv", row.names = FALSE)
 ```
 
 ####Here is the clean code without comments. Please post any comments below if you are getting an error, or if there is something additional that you would like to do within this loop.
-```{r}
+```{r chunk3, eval = FALSE}
 
 setwd("/Users/SP/Dropbox/01_research/papini.repo/combining")
 list.names <- list.files(pattern = ".csv")
